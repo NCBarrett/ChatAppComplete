@@ -75,12 +75,10 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
         firebaseDatabaseReference = FirebaseDatabase.getInstance().reference
 
-
         googleApiClient = GoogleApiClient.Builder(this)
             .enableAutoManage(this/* Fragment Activity*/, this/*onConnectionFaild listener*/)
             .addApi(Auth.GOOGLE_SIGN_IN_API)
             .build()
-
 
         userName = ANONYMOUS
 
@@ -136,8 +134,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
                 progress_bar.visibility = ProgressBar.INVISIBLE
 
                 holder.bind(model)
-
-
             }
 
         }
@@ -295,7 +291,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    private fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
 
             R.id.sign_out_item ->{
