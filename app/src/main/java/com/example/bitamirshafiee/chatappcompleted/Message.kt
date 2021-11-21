@@ -1,4 +1,4 @@
-package com.example.bitamirshafiee.chatappcompleted
+package com.example.neillbarrett.chatappcompleted
 
 class Message() {
     var id:String? = null

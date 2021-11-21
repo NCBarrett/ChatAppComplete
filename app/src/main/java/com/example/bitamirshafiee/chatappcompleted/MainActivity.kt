@@ -1,13 +1,13 @@
-package com.example.bitamirshafiee.chatappcompleted
+package com.example.neillbarrett.chatappcompleted
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -15,6 +15,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.example.neillbarrett.chatappcompleted.R
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.firebase.ui.database.SnapshotParser
@@ -47,7 +48,8 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
         const val ANONYMOUS = "anonymous"
         const val MESSAGE_CHILD = "messages"
         const val REQUEST_IMAGE = 1
-        const val LOADING_IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+        const val LOADING_IMAGE_URL =
+            "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
     }
 
     private var userName : String? = null
@@ -70,7 +72,8 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        linearLayoutManager = LinearLayoutManager(this@MainActivity)
+        linearLayoutManager =
+            LinearLayoutManager(this@MainActivity)
         linearLayoutManager.stackFromEnd = true
 
         firebaseDatabaseReference = FirebaseDatabase.getInstance().reference

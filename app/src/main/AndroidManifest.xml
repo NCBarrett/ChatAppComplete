@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.bitamirshafiee.chatappcompleted">
+          package="com.example.neillbarrett.chatappcompleted">
 
     <application
             android:allowBackup="true"

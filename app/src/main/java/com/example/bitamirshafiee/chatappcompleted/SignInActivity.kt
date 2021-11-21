@@ -1,10 +1,12 @@
-package com.example.bitamirshafiee.chatappcompleted
+package com.example.neillbarrett.chatappcompleted
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.neillbarrett.chatappcompleted.MainActivity
+import com.example.neillbarrett.chatappcompleted.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,7 +27,6 @@ class SignInActivity : AppCompatActivity(){
     private var googleSignInClient: GoogleSignInClient? = null
 
     private  var fireBaseAuth : FirebaseAuth? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

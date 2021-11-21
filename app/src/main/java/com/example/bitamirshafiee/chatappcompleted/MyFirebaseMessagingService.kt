@@ -1,4 +1,4 @@
-package com.example.bitamirshafiee.chatappcompleted
+package com.example.neillbarrett.chatappcompleted
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
