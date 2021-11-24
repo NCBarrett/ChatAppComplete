@@ -10,9 +10,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         const val TAG = "MyFirebaseMessaging"
     }
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
-        Log.d(TAG,"FCM Message Id: ${remoteMessage!!.messageId}")
+        Log.d(TAG,"FCM Message Id: ${remoteMessage.messageId}")
         Log.d(TAG,"FCM Notification Message: ${remoteMessage.notification}")
         Log.d(TAG,"FCM Data Message : ${remoteMessage.data}")
     }

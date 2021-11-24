@@ -38,8 +38,8 @@ import kotlinx.android.synthetic.main.item_message.*
 
 class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener  {
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        Log.d(TAG, "onConnectionFailed:$connectionResult");
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onConnectionFailed:$connectionResult")
+        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
     private var googleSignInClient : GoogleSignInClient? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -79,7 +78,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
         firebaseDatabaseReference = FirebaseDatabase.getInstance().reference
 
         googleApiClient = GoogleApiClient.Builder(this)
-            .enableAutoManage(this/* Fragment Activity*/, this/*onConnectionFaild listener*/)
+            .enableAutoManage(this/* Fragment Activity*/, this/*onConnectionFailed listener*/)
             .addApi(Auth.GOOGLE_SIGN_IN_API)
             .build()
 
@@ -87,7 +86,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
         fireBaseAuth = FirebaseAuth.getInstance()
         firebaseUser = fireBaseAuth!!.currentUser
-
 
         if (firebaseUser == null){
             Log.d(TAG,"USER IS NULL: $firebaseUser")
@@ -138,7 +136,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
                 holder.bind(model)
             }
-
         }
 
         firebaseAdapter!!.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver(){
@@ -192,7 +189,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
                             val storageReference = FirebaseStorage.getInstance()
                                 .getReference(firebaseUser!!.uid)
                                 .child(key!!)
-                                .child(uri.lastPathSegment!!)
+                                .child(uri!!.lastPathSegment!!)
 
                             putImageInStorage(storageReference,uri,key)
                         }else{
@@ -294,7 +291,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
     }
 
-    private fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item?.itemId){
 
             R.id.sign_out_item ->{
