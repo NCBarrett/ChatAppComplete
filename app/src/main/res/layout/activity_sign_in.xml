@@ -5,15 +5,21 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".SignInActivity" android:background="@drawable/login_background">
+        tools:context=".SignInActivity"
+        android:background="@drawable/login_background">
 
     <com.google.android.gms.common.SignInButton
-            android:layout_height="50dp" android:layout_width="match_parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp" android:layout_marginLeft="16dp" android:layout_marginStart="16dp"
+            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:id="@+id/sign_in_button"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
