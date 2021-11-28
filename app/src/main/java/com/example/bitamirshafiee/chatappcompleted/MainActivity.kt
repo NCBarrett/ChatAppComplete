@@ -77,10 +77,10 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
         firebaseDatabaseReference = FirebaseDatabase.getInstance().reference
 
-        googleApiClient = GoogleApiClient.Builder(this)
-            .enableAutoManage(this/* Fragment Activity*/, this/*onConnectionFailed listener*/)
-            .addApi(Auth.GOOGLE_SIGN_IN_API)
-            .build()
+//        googleApiClient = GoogleApiClient.Builder(this)
+//            .enableAutoManage(this/* Fragment Activity*/, this/*onConnectionFailed listener*/)
+//            .addApi(Auth.GOOGLE_SIGN_IN_API)
+//            .build()
 
         userName = ANONYMOUS
 
@@ -273,20 +273,17 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
                         .load(Uri.parse(message.imageUrl))
                         .into(messageImageView)
                 }
-
             }
 
             nameTextView.text = message.name
 
             if (message.photoUrl == null){
                 userImage.setImageDrawable(ContextCompat.getDrawable(userImage.context, R.drawable.ic_account_circle))
-            }else{
+            }else {
                 Glide.with(userImage.context)
                     .load(Uri.parse(message.photoUrl))
                     .into(userImage)
             }
-
-
         }
 
     }
