@@ -1,10 +1,12 @@
 package com.example.neillbarrett.chatappcompleted
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.neillbarrett.chatappcompleted.MainActivity
 import com.example.neillbarrett.chatappcompleted.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,7 +22,7 @@ class SignInActivity : AppCompatActivity(){
 
     companion object {
         private const val TAG = "SignInActivity"
-        private const val RC_SIGN_IN = 9001
+//        private const val RC_SIGN_IN = 9001
     }
 
     //A client for interacting with the Google Sign In API.
@@ -46,43 +48,60 @@ class SignInActivity : AppCompatActivity(){
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-//        val currentUser = fireBaseAuth.currentUser
+//    override fun onStart() {
+//        super.onStart()
 //
-//        startActivity(Intent(this@SignInActivity, MainActivity::class.java))
-//        finish()
-
-//        Log.d(TAG, "IS SHE LOGGED IN BEFORE: $currentUser")
-    }
+////        val currentUser = fireBaseAuth.currentUser
+////
+////        startActivity(Intent(this@SignInActivity, MainActivity::class.java))
+////        finish()
+//
+////        Log.d(TAG, "IS SHE LOGGED IN BEFORE: $currentUser")
+//    }
 
     private fun signIn(){
         val signInIntent = googleSignInClient!!.signInIntent
         //startActivityForResult : Start an activity and expect something in return
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
+//        startActivityForResult(signInIntent, RC_SIGN_IN)
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data : Intent? = result.data
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-
-        if(requestCode == RC_SIGN_IN){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)
-                fireBaseAuthWithGoogle(account!!)
-
-            }catch (e: ApiException){
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e)
-                Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show()
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    fireBaseAuthWithGoogle(account!!)
+                } catch (e: ApiException) {
+                    Log.w(TAG, "Google sign in failed", e)
+                    Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-
+        resultLauncher.launch(intent)
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+//
+//        if(requestCode == RC_SIGN_IN){
+//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+//            try {
+//                // Google Sign In was successful, authenticate with Firebase
+//                val account = task.getResult(ApiException::class.java)
+//                fireBaseAuthWithGoogle(account!!)
+//
+//            }catch (e: ApiException){
+//                // Google Sign In failed, update UI appropriately
+//                Log.w(TAG, "Google sign in failed", e)
+//                Toast.makeText(this, "Google sign in failed", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//
+//    }
 
     private fun fireBaseAuthWithGoogle( account: GoogleSignInAccount){
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.id!!)
@@ -95,7 +114,6 @@ class SignInActivity : AppCompatActivity(){
                 // If sign in fails, display a message to the user. If sign in succeeds
                 // the auth state listener will be notified and logic to handle the
                 // signed in user can be handled in the listener.
-
 
                 if (task.isSuccessful){
                     Log.d(TAG, "signInWithCredential:success")

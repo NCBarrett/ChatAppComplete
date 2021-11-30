@@ -14,17 +14,18 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.neillbarrett.chatappcompleted.R
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.firebase.ui.database.SnapshotParser
-import com.google.android.gms.auth.api.Auth
+//import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
+//import com.google.android.gms.common.ConnectionResult
+//import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -36,18 +37,19 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_message.*
 
-class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener  {
-    override fun onConnectionFailed(connectionResult: ConnectionResult) {
-        Log.d(TAG, "onConnectionFailed:$connectionResult")
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show()
-    }
+class MainActivity : AppCompatActivity()  {
+//class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener  {
+//    override fun onConnectionFailed(connectionResult: ConnectionResult) {
+//        Log.d(TAG, "onConnectionFailed:$connectionResult")
+//        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show()
+//    }
 
     companion object {
 
         private const val TAG = "MainActivity"
         const val ANONYMOUS = "anonymous"
         const val MESSAGE_CHILD = "messages"
-        const val REQUEST_IMAGE = 1
+//        const val REQUEST_IMAGE = 1
         const val LOADING_IMAGE_URL =
             "https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
     }
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
     private  var fireBaseAuth : FirebaseAuth? = null
     private  var firebaseUser : FirebaseUser? = null
 
-    private var googleApiClient : GoogleApiClient? = null
+//    private var googleApiClient : GoogleApiClient? = null
 
     lateinit var linearLayoutManager : LinearLayoutManager
 
@@ -168,38 +170,65 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
             intent.addCategory(Intent.CATEGORY_OPENABLE)
 
             intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_IMAGE)
-        }
-    }
+//            startActivityForResult(intent, REQUEST_IMAGE)
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+            val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+                    { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
+                    if (data != null) {
+                        val uri = data.data
 
-        if (requestCode == REQUEST_IMAGE){
-            if (resultCode == Activity.RESULT_OK){
-                if (data != null){
+                        val tempMessage = Message (null, userName, userPhotoUrl, LOADING_IMAGE_URL)
+                        firebaseDatabaseReference!!.child(MESSAGE_CHILD).push().setValue(tempMessage){
+                            databaseError, databaseReference ->
+                            if (databaseError == null) {
+                                val key = databaseReference.key
+                                val storageReference = FirebaseStorage.getInstance()
+                                    .getReference(firebaseUser!!.uid)
+                                    .child(key!!)
+                                    .child(uri!!.lastPathSegment!!)
 
-                    val uri = data.data
-
-                    val tempMessage = Message(null, userName, userPhotoUrl, LOADING_IMAGE_URL)
-                    firebaseDatabaseReference!!.child(MESSAGE_CHILD).push().setValue(tempMessage){
-                        databaseError, databaseReference ->
-                        if (databaseError == null){
-                            val key = databaseReference.key
-                            val storageReference = FirebaseStorage.getInstance()
-                                .getReference(firebaseUser!!.uid)
-                                .child(key!!)
-                                .child(uri!!.lastPathSegment!!)
-
-                            putImageInStorage(storageReference,uri,key)
-                        }else{
-                            Log.e(TAG, "Unable to write message to database ${databaseError.toException()}")
+                                putImageInStorage(storageReference, uri, key)
+                            } else {
+                                Log.e(TAG, "Unable to write message to database ${databaseError.toException()}")
+                            }
                         }
                     }
                 }
             }
+            resultLauncher.launch(intent)
         }
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (requestCode == REQUEST_IMAGE){
+//            if (resultCode == Activity.RESULT_OK){
+//                if (data != null){
+//
+//                    val uri = data.data
+//
+//                    val tempMessage = Message(null, userName, userPhotoUrl, LOADING_IMAGE_URL)
+//                    firebaseDatabaseReference!!.child(MESSAGE_CHILD).push().setValue(tempMessage){
+//                        databaseError, databaseReference ->
+//                        if (databaseError == null){
+//                            val key = databaseReference.key
+//                            val storageReference = FirebaseStorage.getInstance()
+//                                .getReference(firebaseUser!!.uid)
+//                                .child(key!!)
+//                                .child(uri!!.lastPathSegment!!)
+//
+//                            putImageInStorage(storageReference,uri,key)
+//                        }else{
+//                            Log.e(TAG, "Unable to write message to database ${databaseError.toException()}")
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private fun putImageInStorage(storageReference : StorageReference, uri : Uri?, key : String?){
         val uploadTask = storageReference.putFile(uri!!)
@@ -223,15 +252,14 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
     class MessageViewHolder(v : View) : RecyclerView.ViewHolder(v){
 
-        lateinit var message : Message
+        private lateinit var message : Message
 
-        var messageTextView : TextView
-        var messageImageView : ImageView
-        var nameTextView : TextView
-        var userImage : CircleImageView
+        private var messageTextView : TextView = itemView.findViewById(R.id.message_text_view)
+        private var messageImageView : ImageView
+        private var nameTextView : TextView
+        private var userImage : CircleImageView
 
         init {
-            messageTextView = itemView.findViewById(R.id.message_text_view)
             messageImageView = itemView.findViewById(R.id.message_image_view)
             nameTextView = itemView.findViewById(R.id.name_text_view)
             userImage = itemView.findViewById(R.id.messenger_image_view)
@@ -289,7 +317,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item?.itemId){
+        when(item.itemId){
 
             R.id.sign_out_item ->{
                 fireBaseAuth!!.signOut()
